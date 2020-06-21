@@ -194,4 +194,3 @@ function CheckPet(PetName, Region, Realm, Character, ChangeChecker)
   return GetPetCount(PetName, CharInfo)
 } // CheckPet()
 
-
