@@ -2,8 +2,11 @@
  * @OnlyCurrentDoc
  */
 
-
 Logger.log("At start of Access.gs");
+
+
+//--------------------------------------------------------------------------------------
+
 
 /*
     This function writes a value to a named range in the spreadsheet.
@@ -30,5 +33,3 @@ function ReadRange(RangeName)
   return value;
 } // Read()
 
-
-//--------------------------------------------------------------------------------------
