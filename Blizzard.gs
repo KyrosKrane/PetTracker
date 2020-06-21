@@ -112,9 +112,9 @@ function InvalidateToken()
 /*
   This function gets the data from the Blizzard API
 */
-function GetInfoFromBlizz(Region, Realm, Character, Recursion)
+function GetCharInfoFromBlizz(Region, Realm, Character, Recursion)
 {
-  Logger.log('Starting GetInfoFromBlizz');
+  Logger.log('Starting GetCharInfoFromBlizz');
   
   // Debug values for testing
   if (!Region) Region = TestRegion;
@@ -124,9 +124,9 @@ function GetInfoFromBlizz(Region, Realm, Character, Recursion)
   // Set the level of recursion
   if (!Recursion) Recursion = 0;
   
-  Logger.log('In GetInfoFromBlizz, Region is ' + Region);
-  Logger.log('In GetInfoFromBlizz, Realm is ' + Realm);
-  Logger.log('In GetInfoFromBlizz, Character is ' + Character);
+  Logger.log('In GetCharInfoFromBlizz, Region is ' + Region);
+  Logger.log('In GetCharInfoFromBlizz, Realm is ' + Realm);
+  Logger.log('In GetCharInfoFromBlizz, Character is ' + Character);
 
   // US,EU,KR,TW,CN
   var Domain, Namespace;
@@ -156,21 +156,17 @@ function GetInfoFromBlizz(Region, Realm, Character, Recursion)
     Domain = "gateway.battlenet.com.cn";
     Namespace = "profile-cn";
   }
-  Logger.log('In GetInfoFromBlizz, Domain is ' + Domain);
+  Logger.log('In GetCharInfoFromBlizz, Domain is ' + Domain);
   
   // Clean up the server name. Apostrophes removed. Spaces converted to dashes.
   Realm = Realm.replace("'", "");
   Realm = Realm.replace(" ", "-");javascript:;
-  Logger.log('In GetInfoFromBlizz, after cleanup, Realm is ' + Realm);
+  Logger.log('In GetCharInfoFromBlizz, after cleanup, Realm is ' + Realm);
   
-  // Ensure we have a current token
-  // Note that we should not call this any more. It causes a write to another cell than what it was called from, which Google prohibits
-  // I've moved the function call to a trigger
-  // GetAPIToken();
   
   // Assemble the request URL
   var URL = 'https://' + Domain + '/profile/wow/character/' + Realm.toLowerCase() + '/' + Character.toLowerCase() + '/collections/pets?locale=' + Locale + '&namespace=' + Namespace + '&access_token=' + ReadRange("Token");
-  Logger.log('In GetInfoFromBlizz, URL is ' + URL);
+  Logger.log('In GetCharInfoFromBlizz, URL is ' + URL);
 
   // Set the requested type of response.
   var headers = {
@@ -195,13 +191,15 @@ function GetInfoFromBlizz(Region, Realm, Character, Recursion)
     Logger.log("Got valid response");
     // Figure out what Blizz just told us and pass it back!
     return ParseCharacterInfo(response.getContentText());
-  }
+  } // valid toon
+  
   else if (response.getResponseCode() == 404)
   {
     Logger.log("Character was not found; storing an empty character set.");
     // Return an empty object to indicate no pets
-    return JSON.stringify(GetEmptyCharInfo());
-  }
+    return 404;
+  } // toon not found
+  
   else
   {
     // One of the following happened:
@@ -211,6 +209,5 @@ function GetInfoFromBlizz(Region, Realm, Character, Recursion)
     // In either case, the only solution is to ask the user to reload (which updates the token) and try again.
     Logger.log("Unhandled response, asking user to reload");
     return 999;
-  
-  }
-} // GetInfoFromBlizz()
+  } // Unhandled response
+} // GetCharInfoFromBlizz()
