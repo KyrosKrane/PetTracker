@@ -39,18 +39,6 @@ function ForceTokenUpdate()
 */
 function onOpen(e) 
 {
-  WriteRange('TokenAutoUpdate', Math.random());
-  WriteRange('AutoUpdate', Math.random());
+  ForceTokenUpdate();
+  ForceUpdate();
 } // onOpen()
-
-/*
-function onSelectionChange(e)
-{
-  GetAPIToken(ReadRange('AutoUpdate'));
-} // onSelectionChange()
-
-function onEdit(e)
-{
-  GetAPIToken(ReadRange('AutoUpdate'));
-} // onEdit()
-*/
