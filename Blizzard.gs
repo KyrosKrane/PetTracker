@@ -6,6 +6,9 @@
 Logger.log("At start of Blizzard.gs");
 
 
+var ClientId = '80fac70b1fed4cd2a6a6bfbee1984208';
+var ClientSecret = '7g8sjZWcEa9j0m4VqK3FHiF869MLAV0w';
+
 // This variable is a check for whether a token update is in progress, to prevent excessive calls to the Blizzard token API.
 var TokenUpdateInProgress = false;
 
@@ -19,15 +22,14 @@ function GetAPIToken(ChangeChecker)
 {
   Logger.log("In GetAPIToken, Starting.");
   // Check if a token already exists and is valid.
-  var StoredToken = ReadRange('Token');
-  var StoredTokenExpiry = ReadRange('TokenExpiry');
+  var StoredToken = Get('Token');
+  var StoredTokenExpiry = Get('TokenExpiry');
   var Now = (new Date).getTime() + 10000; // add ten seconds to "now" to account for round trip time on the request and response.
   
   if (StoredToken && StoredTokenExpiry && StoredTokenExpiry > Now)
   {
     // Token is good, nothing to do
     Logger.log("Existing Token is good.");
-    return ["", StoredToken, StoredTokenExpiry];
   }
   
   // Check if another call is already updating the token, and if not, set the flag
@@ -40,9 +42,6 @@ function GetAPIToken(ChangeChecker)
   
     // If we reach here, we need a new token.
     Logger.log("In GetAPIToken, Getting new token.");
-  
-    const ClientId = ReadRange('ClientId');
-    const ClientSecret = ReadRange('ClientSecret');
   
     // Set the authentication credentials
     var headers = {
@@ -80,14 +79,12 @@ function GetAPIToken(ChangeChecker)
     Logger.log("In GetAPIToken, Token = " + Token);
     Logger.log("In GetAPIToken, TokenExpiry = " + TokenExpiry);
   
+    // Store the token for reuse
+    Set('Token', Token);
+    Set('TokenExpiry', TokenExpiry);
+  
   // Mark that we are no longer updating the token
   TokenUpdateInProgress = false;
-  
-  // Store the token for reuse
-  return(["", Token, TokenExpiry]);
-  //WriteRange('Token', Token);
-  //WriteRange('TokenExpiry', TokenExpiry);
-  
   
   // @TODO: No error handling at all!
   
@@ -102,7 +99,7 @@ function GetAPIToken(ChangeChecker)
 */
 function InvalidateToken()
 {
-  WriteRange('TokenExpiry', 1); // set the token expiry to be in the past (in 1970!)
+  Set('TokenExpiry', 1); // set the token expiry to be in the past (in 1970!)
 } // InvalidateToken()
 
 
@@ -165,7 +162,7 @@ function GetCharInfoFromBlizz(Region, Realm, Character, Recursion)
   
   
   // Assemble the request URL
-  var URL = 'https://' + Domain + '/profile/wow/character/' + Realm.toLowerCase() + '/' + Character.toLowerCase() + '/collections/pets?locale=' + Locale + '&namespace=' + Namespace + '&access_token=' + ReadRange("Token");
+  var URL = 'https://' + Domain + '/profile/wow/character/' + Realm.toLowerCase() + '/' + Character.toLowerCase() + '/collections/pets?locale=' + Locale + '&namespace=' + Namespace + '&access_token=' + Get("Token");
   Logger.log('In GetCharInfoFromBlizz, URL is ' + URL);
 
   // Set the requested type of response.
