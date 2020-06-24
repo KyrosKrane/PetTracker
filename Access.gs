@@ -9,13 +9,28 @@ Logger.log("At start of Access.gs");
 
 
 /*
+    This function gets a named range. Shortcut for less typing...
+*/
+function GetRange(RangeName) 
+{
+  return SpreadsheetApp.getActiveSpreadsheet().getRangeByName(RangeName);
+} // GetRange()
+
+
+//--------------------------------------------------------------------------------------
+
+
+/*
     This function writes a value to a named range in the spreadsheet.
     Return value is the same as the value of the write attempt.
 */
-function WriteRange(RangeName, Value) {
+// Can't enable this function because it triggers Google permission issues
+/*
+function WriteRange(RangeName, Value) 
+{
   return SpreadsheetApp.getActiveSpreadsheet().getRangeByName(RangeName).getCell(1, 1).setValue(Value);
-} // Write()
-
+} // WriteRange()
+*/
 
 //--------------------------------------------------------------------------------------
 
@@ -28,7 +43,6 @@ function ReadRange(RangeName)
 {
   if (!RangeName) RangeName="ClientID";
   var value = SpreadsheetApp.getActiveSpreadsheet().getRangeByName(RangeName).getCell(1, 1).getValue();
-  //getSheetByName('Settings').
   Logger.log("In Read, for range name %s, value is %s", RangeName, value);
   return value;
-} // Read()
+} // ReadRange()
