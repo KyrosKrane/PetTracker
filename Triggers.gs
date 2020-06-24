@@ -23,16 +23,3 @@ function onEdit(e)
     SpreadsheetApp.getActiveSpreadsheet().getRangeByName('AutoUpdate').getCell(1, 1).setValue(Math.random());
   }
 } // onEdit()
-
-
-//--------------------------------------------------------------------------------------
-
-
-/*
-  This function is run when the sheet is opened.
-  Use this to get the initial token and store it in the properties.
-*/
-function onOpen(e) 
-{
-  GetAPIToken();
-} // onOpen()

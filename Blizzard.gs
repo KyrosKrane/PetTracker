@@ -165,7 +165,9 @@ function GetCharInfoFromBlizz(Region, Realm, Character, Recursion)
   Realm = Realm.replace(" ", "-");javascript:;
   Logger.log('In GetCharInfoFromBlizz, after cleanup, Realm is ' + Realm);
   
-  
+  // Make sure we have a valid token.
+  GetAPIToken();
+    
   // Assemble the request URL
   var URL = 'https://' + Domain + '/profile/wow/character/' + Realm.toLowerCase() + '/' + Character.toLowerCase() + '/collections/pets?locale=' + Locale + '&namespace=' + Namespace + '&access_token=' + Get("Token");
   Logger.log('In GetCharInfoFromBlizz, URL is ' + URL);
