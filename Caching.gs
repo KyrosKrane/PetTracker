@@ -2,8 +2,11 @@
  * @OnlyCurrentDoc
  */
 
-
 Logger.log("At start of Caching.gs");
+
+
+//--------------------------------------------------------------------------------------
+
 
 /*
   Functions to simplify saving and retrieving data in Google's script properties store.

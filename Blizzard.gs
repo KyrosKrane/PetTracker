@@ -13,12 +13,14 @@ var ClientSecret = '7g8sjZWcEa9j0m4VqK3FHiF869MLAV0w';
 var TokenUpdateInProgress = false;
 
 
+//--------------------------------------------------------------------------------------
+
+
 /*
-    This function requests an API token from Blizzard.
-    If a valid token is still cached, that's returned directly.
-    Note that ChangeChecker is not used in the function. It's just there to force Google Sheets to recalculate periodically.
+    This function requests an API token from Blizzard and stores it in the Google property store for the sheet.
+    If a valid token is still cached, it exits early.
 */
-function GetAPIToken(ChangeChecker)
+function GetAPIToken()
 {
   Logger.log("In GetAPIToken, Starting.");
   // Check if a token already exists and is valid.
@@ -30,14 +32,17 @@ function GetAPIToken(ChangeChecker)
   {
     // Token is good, nothing to do
     Logger.log("Existing Token is good.");
+    return;
   }
   
   // Check if another call is already updating the token, and if not, set the flag
   if (TokenUpdateInProgress)
   {
-    Logger.log("Token update already in progress, exiting early.");
+    Logger.log("Token update already in progress, pausing two seconds then returning.");
+    Utilities.sleep(2000);
     return;
   }
+  
   TokenUpdateInProgress = true;
   
     // If we reach here, we need a new token.
