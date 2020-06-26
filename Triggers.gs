@@ -9,36 +9,17 @@ Logger.log("At start of Triggers.gs");
 
 
 /*
-  This function updates a hidden cell to a random value; that value is then passed to CheckPet() to force an update periodically.
-  It's invoked by an external trigger that runs on a set schedule.
+  This function triggers whenever the user edits the sheet. We check if it's a specific cell. If it is, refresh the toon counts.
 */
-function ForceUpdate()
+function onEdit(e)
 {
-  WriteRange('AutoUpdate', Math.random())
-} // ForceUpdate()
-
-
-//--------------------------------------------------------------------------------------
-
-
-/*
-  This function updates a hidden cell to a random value; that value is then passed to GetAPIToken() to force an update periodically.
-  It's invoked by an external trigger that runs on a set schedule.
-*/
-function ForceTokenUpdate()
-{
-  WriteRange('TokenAutoUpdate', Math.random())
-} // ForceTokenUpdate()
-
-
-//--------------------------------------------------------------------------------------
-
-
-/*
-  This function is executed when the sheet is opened.
-*/
-function onOpen(e) 
-{
-  ForceTokenUpdate();
-  ForceUpdate();
-} // onOpen()
+  var ManualUpdate = GetRange('ManualUpdate');
+  var PeriodicUpdate = GetRange('PeriodicUpdate');
+  var EditRange = e.range;
+  
+  if (RangeIntersect(ManualUpdate, EditRange) || RangeIntersect(PeriodicUpdate, EditRange))
+  {
+    // Can't use WriteRange because it triggers Google permissions flags
+    SpreadsheetApp.getActiveSpreadsheet().getRangeByName('AutoUpdate').getCell(1, 1).setValue(Math.random());
+  }
+} // onEdit()
