@@ -162,7 +162,7 @@ function GetCharInfoFromBlizz(Region, Realm, Character, Recursion)
   
   // Clean up the server name. Apostrophes removed. Spaces converted to dashes.
   Realm = Realm.replace("'", "");
-  Realm = Realm.replace(" ", "-");javascript:;
+  Realm = Realm.replace(" ", "-");
   Logger.log('In GetCharInfoFromBlizz, after cleanup, Realm is ' + Realm);
   
   // Make sure we have a valid token.
