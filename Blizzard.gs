@@ -169,12 +169,13 @@ function GetCharInfoFromBlizz(Region, Realm, Character, Recursion)
   GetAPIToken();
     
   // Assemble the request URL
-  var URL = 'https://' + Domain + '/profile/wow/character/' + Realm.toLowerCase() + '/' + Character.toLowerCase() + '/collections/pets?locale=' + Locale + '&namespace=' + Namespace + '&access_token=' + Get("Token");
+  var URL = 'https://' + Domain + '/profile/wow/character/' + Realm.toLowerCase() + '/' + Character.toLowerCase() + '/collections/pets?locale=' + Locale + '&namespace=' + Namespace;
   Logger.log('In GetCharInfoFromBlizz, URL is ' + URL);
 
   // Set the requested type of response.
   var headers = {
-    "Accept" : "application/json"
+    "Accept" : "application/json",
+    "Authorization": "Bearer " +  Get("Token")
   };
   
   // Assemble the parameters

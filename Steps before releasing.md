@@ -5,7 +5,7 @@
 1. Hide the Settings tab
 1. Hide the Tracked pets tab
 1. Delete characters on the Characters tab
-1. On the Pet Charms tab, delete any saved numbers (remember there's two rows!)
+1. On the Pet Charms tab, delete any saved numbers
 1. Protect all the visible sheets, except user editable ranges on Characters and Pet Charms tabs
 1. Scroll up and select cell A1 on each sheet
 1. Open the script editor and set the version number for the script
